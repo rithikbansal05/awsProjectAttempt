@@ -7,15 +7,16 @@
   <body>
     <h1> Run the program </h1>
     <p> use the following buttons </p>
+    <input type="button" id="myButton" value="Load Data"/>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"> </script>
     <script type=text/javascript> $(function() { $("#mybutton").click(function (event) { $.getJSON('/LoadFunc', { },
     function(data) { }); return false; }); }); </script>
 
-    <input type="button" id="myButton" value="Load Data"/>
 
+    <input type="button" id="clearButton" value="Clear Data"/>
     <script type=text/javascript> $(function() { $("#clearButton").click(function (event) { $.getJSON('/ClearFunc', { },
     function(data) { }); return false; }); }); </script>
-    <input type="button" id="clearButton" value="Clear Data"/>
+
 
     <p></p>
 	<form method="post" id="form">
