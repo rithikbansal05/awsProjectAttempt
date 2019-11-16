@@ -12,7 +12,7 @@ dbName = 'programfourestoragetable'
 my_list = []
 data = []
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 application = Flask(__name__, template_folder='template', data=data)
 application.debug = True
@@ -31,6 +31,11 @@ def LoadData():
 def ClearFunc():
     clear_data()
 
+@application.route("/",methods=['POST'])
+def queryMethod():
+    fName = request.form['FirstName']
+    lName = request.form['LastName']
+    queryData(fName,lName)
 
 def read_data_upload_s3():
     r = requests.get(url, stream=True)

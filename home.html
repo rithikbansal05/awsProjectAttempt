@@ -7,7 +7,7 @@
   <body>
     <h1> Run the program </h1>
     <p> use the following buttons </p>
-
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"> </script>
     <script type=text/javascript> $(function() { $("#mybutton").click(function (event) { $.getJSON('/LoadFunc', { },
     function(data) { }); return false; }); }); </script>
 
@@ -16,13 +16,17 @@
     <script type=text/javascript> $(function() { $("#clearButton").click(function (event) { $.getJSON('/ClearFunc', { },
     function(data) { }); return false; }); }); </script>
     <input type="button" id="clearButton" value="Clear Data"/>
-	<button onclick="loadData()">Load Data</button>
-	<button onclick="clearData()">Clear Data</button>
-	<p></p>
-	<form action="/back_query">
+
+    <p></p>
+	<form method="POST">
 	First name: <input type="text" name="FirstName" ><br>
 	Last name: <input type="text" name="LastName"><br>
-	<input type="submit" value="Query">	
+	<input type="submit" value="Query">
 	</form>
+    <ul>
+        {% for item in data %}
+        <li> {{item}}</li>li>
+        {% endfor %}
+    </ul>
   </body>
 </html>
