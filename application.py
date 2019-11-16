@@ -14,7 +14,7 @@ data = []
 
 from flask import Flask, render_template, request
 
-application = Flask(__name__, template_folder='template', data=data)
+application = Flask(__name__, template_folder='template')
 application.debug = True
 
 
@@ -36,6 +36,7 @@ def queryMethod():
     fName = request.form['FirstName']
     lName = request.form['LastName']
     queryData(fName,lName)
+    return render_template('home.html',data=data)
 
 def read_data_upload_s3():
     r = requests.get(url, stream=True)
