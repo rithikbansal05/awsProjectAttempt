@@ -7,13 +7,22 @@
   <body>
     <h1> Run the program </h1>
     <p> use the following buttons </p>
+
+    <script type=text/javascript> $(function() { $("#mybutton").click(function (event) { $.getJSON('/LoadFunc', { },
+    function(data) { }); return false; }); }); </script>
+
+    <input type="button" id="myButton" value="Load Data"/>
+
+    <script type=text/javascript> $(function() { $("#clearButton").click(function (event) { $.getJSON('/ClearFunc', { },
+    function(data) { }); return false; }); }); </script>
+    <input type="button" id="clearButton" value="Clear Data"/>
 	<button onclick="loadData()">Load Data</button>
 	<button onclick="clearData()">Clear Data</button>
 	<p></p>
-	<form action="/action_page.php">
+	<form action="/back_query">
 	First name: <input type="text" name="FirstName" ><br>
 	Last name: <input type="text" name="LastName"><br>
-	<input type="submit" value="Query">	
+	<input type="submit" value="Query">
 	</form>
   </body>
 </html>
