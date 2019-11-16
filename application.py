@@ -10,10 +10,11 @@ bucket_name = 'programfourestorage'
 key = 'input.txt'
 dbName = 'programfourestoragetable'
 my_list = []
+data = []
 
 from flask import Flask, render_template
 
-application = Flask(__name__, template_folder='template')
+application = Flask(__name__, template_folder='template', data=data)
 application.debug = True
 
 
@@ -135,14 +136,6 @@ def update_dynamoDb():
         checkAndAddToDb(line)
 
 
-"""
-    Recursive function to take a backup of all subdirectories and
-    their contents into the bucket of users choice. 
-    It not only takes a backup at each time but first verifies that 
-    the same file has not already been backed up
-"""
-
-
 def load_data():
     read_data_upload_s3()
     update_dynamoDb()
@@ -192,31 +185,9 @@ def queryData(q1, q2):
             response = table.query(KeyConditionExpression=boto3.dynamodb.conditions.Key('firstName').eq(str(q1)))
 
     for i in response['Items']:
-        print(i['firstName'], " ", i['lastName'], " ", i['otherString'])
-
-
-"""
-    The method validates the arguments passed in to the program
-    It takes an argument of the current directory that needs to be backed
-    It then recursively backs up all subdirectories and files in the bucket of 
-    choice
-
-    Assumption: the boto3 has been setup by anyone using the code. Refer to the
-    steps in the BuildFile to setup Boto3 and configure it with your AWS account
-    using the access key and secret access key
-"""
-
-
-def main():
-    load_data()
-    # clear_data()
-    # clear_data()
-
-    q1 = "Ray"
-    q2 = ""
-    queryData(q1, q2)
-
-    clear_data()
+        temp2 = []
+        temp2.append(i['firstName']).append(i['lastName']).append(i['otherString'])
+        data.append(temp2)
 
 
 if __name__ == "__main__":
