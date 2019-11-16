@@ -2,7 +2,6 @@ import boto3
 import time
 import requests
 import boto3.dynamodb.conditions
-import validators as validators
 
 s3 = boto3.resource("s3")
 client1 = boto3.client("s3")
@@ -36,8 +35,6 @@ def ClearFunc():
 
 @application.route("/",methods=['POST'])
 def queryMethod():
-    #fName = TextField('First Name', validators=[validators.required()])
-
     fName = request.form['FirstName']
     lName = request.form['LastName']
     queryData(fName,lName)
