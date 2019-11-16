@@ -7,22 +7,34 @@
   <body>
     <h1> Run the program </h1>
     <p> use the following buttons </p>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"> </script>
-    <script type=text/javascript> $(function() { $("#mybutton").click(function (event) { $.getJSON('/LoadFunc', { },
-    function(data) { }); return false; }); }); </script>
-
-    <input type="button" id="myButton" value="Load Data"/>
-
-    <script type=text/javascript> $(function() { $("#clearButton").click(function (event) { $.getJSON('/ClearFunc', { },
-    function(data) { }); return false; }); }); </script>
-    <input type="button" id="clearButton" value="Clear Data"/>
+    <a href="/loadData"><input type="button" value="Load Data"> </a>
+    <a href="/clearData"><input type="button" value="Clear Data"></a>
 
     <p></p>
-	<form method="POST">
-	First name: <input type="text" name="FirstName" ><br>
-	Last name: <input type="text" name="LastName"><br>
-	<input type="submit" value="Query">
+	<form method="post" id="form">
+        <label for="FirstName"> First Name: </label>
+        <input type="text" id="FirstName" name="fName" autofocus autocomplete="off">
+
+        <button>Query</button>
 	</form>
+    <p id="loaddat"></p>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script>
+			$('#form').on('submit', function(e){
+				var number = $('#FirstName').val();
+				e.preventDefault();
+				$.ajax({
+					url: 'http://127.0.0.1:5000/loaddat/',
+					data: {'fName': number},
+					method: 'POST',
+					success: function(data) {
+						$('#FirstName').val('');
+						$('#loaddat').html('Square of ' + number + ' is ' + data['loaddat'])
+					}
+				});
+			});
+		</script>
+
     <ul>
         {% for item in data %}
         <li> {{item}}</li>

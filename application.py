@@ -23,14 +23,12 @@ application.debug = True
 def hello():
     return render_template('home.html')
 
-
-
-@application.route("/LoadFunc")
+@application.route("/loadData")
 def LoadData():
     load_data()
     print("Data loaded in the location")
 
-@application.route("/ClearFunc")
+@application.route("/clearData")
 def ClearFunc():
     clear_data()
     print("Data cleared from the location")
