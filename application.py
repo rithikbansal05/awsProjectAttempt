@@ -22,6 +22,14 @@ application.debug = True
 def hello():
     return render_template('home.html')
 
+@application.route("/LoadFunc")
+def LoadData():
+    load_data()
+
+@application.route("/ClearFun")
+def ClearFunc():
+    clear_data()
+
 
 def read_data_upload_s3():
     r = requests.get(url, stream=True)
