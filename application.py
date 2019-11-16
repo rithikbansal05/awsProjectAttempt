@@ -23,6 +23,8 @@ application.debug = True
 def hello():
     return render_template('home.html')
 
+
+
 @application.route("/LoadFunc")
 def LoadData():
     load_data()
@@ -33,12 +35,11 @@ def ClearFunc():
     clear_data()
     print("Data cleared from the location")
 
-@application.route("/",methods=['POST'])
-def queryMethod():
-    fName = request.form['FirstName']
-    lName = request.form['LastName']
-    queryData(fName,lName)
-    return render_template('home.html',data=data)
+@application.route("/loaddat/",methods=['POST'])
+def loaddat():
+    fName = str(request.form.get('number'))
+    queryData(fName,"")
+    return data
 
 def read_data_upload_s3():
     r = requests.get(url, stream=True)
