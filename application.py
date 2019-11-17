@@ -23,12 +23,12 @@ application.debug = True
 def hello():
     return render_template('home.html')
 
-@application.route("/loadData")
+@application.route('/load',methods=['POST'])
 def LoadData():
     load_data()
     print("Data loaded in the location")
 
-@application.route("/clearData")
+@application.route("/clear",methods=['POST'])
 def ClearFunc():
     clear_data()
     print("Data cleared from the location")
