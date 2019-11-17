@@ -32,7 +32,7 @@ def ClearFunc():
     print("Data cleared from the location")
     return render_template('home.html')
 
-@application.route("/loaddat/",methods=['POST'])
+@application.route("/query",methods=['POST'])
 def loaddat():
     fName = str(request.form['fName'])
     lName = str(request.form['lName'])
