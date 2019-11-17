@@ -23,7 +23,7 @@ application.debug = True
 def hello():
     return render_template('home.html')
 
-@application.route('/load',methods=['POST'])
+@application.route('/delete',methods=['POST'])
 def LoadData():
     load_data()
     print("Data loaded in the location")
