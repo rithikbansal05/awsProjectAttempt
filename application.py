@@ -15,24 +15,24 @@ data = []
 
 application = Flask(__name__, template_folder='template')
 
-@application.route("/")
+@application.route('/')
 def hello():
-    render_template('home.html')
-    load_data()
+    return render_template('home.html')
+    #load_data()
 
-@application.route("/load",methods=["POST"])
+@application.route('/load',methods=['POST'])
 def LoadData():
     load_data()
     print("Data loaded in the location")
     return render_template('home.html')
 
-@application.route("/clear",methods=["POST"])
+@application.route('/clear',methods=['POST'])
 def ClearFunc():
     clear_data()
     print("Data cleared from the location")
     return render_template('home.html')
 
-@application.route("/query",methods=['POST'])
+@application.route('/query',methods=['POST'])
 def loaddat():
     fName = str(request.form['fName'])
     lName = str(request.form['lName'])
