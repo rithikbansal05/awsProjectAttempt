@@ -7,38 +7,21 @@
   <body>
     <h1> Run the program </h1>
     <p> use the following buttons </p>
-    <a href="/loadData"><input type="button" value="Load Data"> </a>
-    <a href="/clearData"><input type="button" value="Clear Data"></a>
+    <form action="clear" method="POST">
+        <input type="submit" value="Clear Data">
+    </form>
+
+    <form action="delete" method="POST">
+        <input type="submit" value="Load Data">
+    </form>
 
     <p></p>
 	<form method="post" id="form">
         <label for="FirstName"> First Name: </label>
         <input type="text" id="FirstName" name="fName" autofocus autocomplete="off">
-
+        <label for="LastName"> Last Name: </label>>
+        <input type="text" id="LastName" name="lName" autofocus autocomplete="off">
         <button>Query</button>
 	</form>
-    <p id="loaddat"></p>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-		<script>
-			$('#form').on('submit', function(e){
-				var number = $('#FirstName').val();
-				e.preventDefault();
-				$.ajax({
-					url: 'http://127.0.0.1:5000/loaddat/',
-					data: {'fName': number},
-					method: 'POST',
-					success: function(data) {
-						$('#FirstName').val('');
-						$('#loaddat').html('Square of ' + number + ' is ' + data['loaddat'])
-					}
-				});
-			});
-		</script>
-
-    <ul>
-        {% for item in data %}
-        <li> {{item}}</li>
-        {% endfor %}
-    </ul>
   </body>
 </html>
