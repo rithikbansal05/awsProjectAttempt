@@ -13,7 +13,7 @@ dbName = 'programfourestoragetable'
 my_list = []
 data = []
 
-application = Flask(__name__, template_folder='template')
+application = Flask(__name__)
 
 @application.route('/')
 def hello():
@@ -178,7 +178,7 @@ def queryData(q1, q2):
     if dbName not in dynamodb.list_tables()['TableNames']:
         print("DAtabase table does not exist. Load data first")
     else:
-        if (q1 is None or len(q1) is 0) and (q2 is None and len(q2) is 0):
+        if (q1 is None or len(q1) is 0) and (q2 is None or len(q2) is 0):
             print("FirstName and lastname values null or empty. Try again")
         elif (q1 is not None and len(q1) > 0) and (q2 is not None and len(q2) > 0):
             print("Querying database right now")
