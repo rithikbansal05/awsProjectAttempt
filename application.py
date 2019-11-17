@@ -17,8 +17,8 @@ application = Flask(__name__, template_folder='template')
 
 @application.route("/")
 def hello():
+    render_template('home.html')
     load_data()
-    return render_template('home.html')
 
 @application.route("/load",methods=["POST"])
 def LoadData():
