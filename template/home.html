@@ -7,19 +7,19 @@
   <body>
     <h1> Run the program </h1>
     <p> use the following buttons </p>
-    <form action="clear" method="POST">
-        <input type="submit" value="Clear Data">
+    <form action="/clear" method="POST">
+        <button type="submit" name="Clear"> Clear Data</button>
     </form>
 
-    <form action="delete" method="POST">
-        <input type="submit" value="Load Data">
+    <form action="/load" method="POST">
+        <button type="submit" name="Load">Load Data</button>
     </form>
 
     <p></p>
 	<form method="post" id="form">
         <label for="FirstName"> First Name: </label>
         <input type="text" id="FirstName" name="fName" autofocus autocomplete="off">
-        <label for="LastName"> Last Name: </label>>
+        <label for="LastName"> Last Name: </label>
         <input type="text" id="LastName" name="lName" autofocus autocomplete="off">
         <button>Query</button>
 	</form>
