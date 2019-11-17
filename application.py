@@ -19,17 +19,17 @@ application = Flask(__name__, template_folder='template')
 def hello():
     return render_template('home.html')
 
-@application.route('/load',methods=['POST'])
+@application.route('load',methods=['POST'])
 def LoadData():
     load_data()
     return render_template('home.html')
 
-@application.route('/clear',methods=['POST'])
+@application.route('clear',methods=['POST'])
 def ClearFunc():
     clear_data()
     return render_template('home.html')
 
-@application.route('/query',methods=['POST'])
+@application.route('query',methods=['POST'])
 def loaddat():
     fName = str(request.form['fName'])
     lName = str(request.form['lName'])
