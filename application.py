@@ -2,6 +2,7 @@ import boto3
 import time
 import requests
 import boto3.dynamodb.conditions
+from flask import Flask, render_template, request
 
 s3 = boto3.resource("s3")
 client1 = boto3.client("s3")
@@ -12,24 +13,22 @@ dbName = 'programfourestoragetable'
 my_list = []
 data = []
 
-from flask import Flask, render_template, request
-
 application = Flask(__name__, template_folder='template')
 application.debug = True
 
 
-
 @application.route("/")
 def hello():
+    load_data()
     return render_template('home.html')
 
-@application.route('/load',methods=['POST'])
+@application.route("/load",methods=["POST"])
 def LoadData():
     load_data()
     print("Data loaded in the location")
     return render_template('home.html')
 
-@application.route("/clear",methods=['POST'])
+@application.route("/clear",methods=["POST"])
 def ClearFunc():
     clear_data()
     print("Data cleared from the location")
@@ -37,8 +36,9 @@ def ClearFunc():
 
 @application.route("/loaddat/",methods=['POST'])
 def loaddat():
-    fName = str(request.form.get('number'))
-    queryData(fName,"")
+    fName = str(request.form['fName'])
+    lName = str(request.form['lName'])
+    queryData(fName,lName)
     return data
 
 def read_data_upload_s3():
