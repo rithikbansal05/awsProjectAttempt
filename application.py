@@ -13,23 +13,20 @@ dbName = 'programfourestoragetable'
 my_list = []
 data = []
 
-application = Flask(__name__)
+application = Flask(__name__, template_folder='template')
 
 @application.route('/')
 def hello():
     return render_template('home.html')
-    #load_data()
 
 @application.route('/load',methods=['POST'])
 def LoadData():
     load_data()
-    print("Data loaded in the location")
     return render_template('home.html')
 
 @application.route('/clear',methods=['POST'])
 def ClearFunc():
     clear_data()
-    print("Data cleared from the location")
     return render_template('home.html')
 
 @application.route('/query',methods=['POST'])
