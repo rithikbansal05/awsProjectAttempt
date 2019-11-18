@@ -256,7 +256,7 @@ def queryData(q1, q2):
                 print("Querying database right now with firstName only")
                 response = table.query(KeyConditionExpression=boto3.dynamodb.conditions.Key('firstName').eq(str(q1)))
 
-        application.logger.info(str(len(response)) + " " + response[0])
+        application.logger.info(str(len(response)))
         return response[:]
         #for i in response['Items']:
         #    temp2 = []
