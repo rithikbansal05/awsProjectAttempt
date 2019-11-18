@@ -47,9 +47,9 @@ def loaddat():
     application.logger.info(str(qData))
     if qData != [] and qData != None:
         application.logger.info("got results. Uploading")
-        return render_template("home.html", query=qData)
+        return render_template("home.html", data=qData)
     elif qData == None or qData == []:
-        return render_template("home.html", query="No users match query results")
+        return render_template("home.html", data="No users match query results")
 
 def read_data_upload_s3():
     application.logger.info("adding file to s3")
