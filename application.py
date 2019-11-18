@@ -1,3 +1,4 @@
+import os
 import boto3
 import time
 import requests
@@ -44,6 +45,7 @@ def loaddat():
 
 def read_data_upload_s3():
     application.logger.info("adding file to s3")
+
     r = requests.get(url, stream=True)
 
     session = boto3.Session()
@@ -157,11 +159,31 @@ def load_data():
 
 
 def clear_data():
-    dynamodb = boto3.client('dynamodb')
+    global table
+    #dynamodb = boto3.client('dynamodb')
     dynDb = boto3.resource('dynamodb')
-    table_list = dynamodb.list_tables()['TableNames']
-    table = dynDb.Table('programfourestoragetable')
+    #table_list = dynamodb.list_tables()['TableNames']
 
+    try:
+        table = dynDb.Table('programfourestoragetable')
+    except ClientError as e:
+        print("Not table")
+        return
+
+    try:
+        table.delete()
+    except ClientError  as e:
+        print("Table not there")
+        return 0
+
+    try:
+        s3.Object(bucket_name, key).delete()
+        time.sleep(3)
+    except ClientError as e:
+        print("file not found")
+        return 0
+
+    '''
     if dbName in table_list:
         table.delete()
         time.sleep(5)
@@ -173,37 +195,41 @@ def clear_data():
     if obj in obj_list:
         obj.delete()
         time.sleep(3)
-
+    
     print("Successfully deleted the data or it was never there")
-
+    '''
 
 def queryData(q1, q2):
     dynamodb = boto3.client('dynamodb')
     tempDb = boto3.resource('dynamodb')
     table = tempDb.Table('programfourestoragetable')
     response = []
+    try:
+        if dbName not in dynamodb.list_tables()['TableNames']:
+            print("DAtabase table does not exist. Load data first")
+        else:
+            if (q1 is None or len(q1) is 0) and (q2 is None or len(q2) is 0):
+                print("FirstName and lastname values null or empty. Try again")
+            elif (q1 is not None and len(q1) > 0) and (q2 is not None and len(q2) > 0):
+                print("Querying database right now")
+                response = table.query(KeyConditionExpression=boto3.dynamodb.conditions.Key('firstName').eq(
+                    str(q1)) & boto3.dynamodb.conditions.Key('lastName').eq(str(q2)))
+            elif q2 is not None and len(q2) > 0:
+                print("Querying database right now with lastName only")
+                response = table.query(KeyConditionExpression=boto3.dynamodb.conditions.Key('lastName').eq(str(q2)))
+            elif q1 is not None and len(q1) > 0:
+                print("Querying database right now with firstName only")
+                response = table.query(KeyConditionExpression=boto3.dynamodb.conditions.Key('firstName').eq(str(q1)))
 
-    if dbName not in dynamodb.list_tables()['TableNames']:
-        print("DAtabase table does not exist. Load data first")
-    else:
-        if (q1 is None or len(q1) is 0) and (q2 is None or len(q2) is 0):
-            print("FirstName and lastname values null or empty. Try again")
-        elif (q1 is not None and len(q1) > 0) and (q2 is not None and len(q2) > 0):
-            print("Querying database right now")
-            response = table.query(KeyConditionExpression=boto3.dynamodb.conditions.Key('firstName').eq(
-                str(q1)) & boto3.dynamodb.conditions.Key('lastName').eq(str(q2)))
-        elif q2 is not None and len(q2) > 0:
-            print("Querying database right now with lastName only")
-            response = table.query(KeyConditionExpression=boto3.dynamodb.conditions.Key('lastName').eq(str(q2)))
-        elif q1 is not None and len(q1) > 0:
-            print("Querying database right now with firstName only")
-            response = table.query(KeyConditionExpression=boto3.dynamodb.conditions.Key('firstName').eq(str(q1)))
-
-    for i in response['Items']:
-        temp2 = []
-        temp2.append(i['firstName']).append(i['lastName']).append(i['otherString'])
-        data.append(temp2)
-
+        for i in response['Items']:
+            temp2 = []
+            temp2.append(i['firstName']).append(i['lastName']).append(i['otherString'])
+            data.append(temp2)
+            return data
+    except ClientError as e:
+        retVal = []
+        retVal.append("Table does not exist")
+        return retVal
 
 if __name__ == "__main__":
     application.run()
