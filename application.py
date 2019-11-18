@@ -43,10 +43,11 @@ def loaddat():
     lName = str(request.form['lName'])
     application.logger.info("The first name and last name are" +fName + " " + lName)
     qData = queryData(fName,lName)
+    application.logger.info("data retrieved is " + qData)
     if qData != [] and qData != None:
         return render_template("home.html", query=qData)
     elif qData == None or qData == []:
-        return render_template("home.html", query="User NF.")
+        return render_template("home.html", query="No users match query results")
 
 def read_data_upload_s3():
     application.logger.info("adding file to s3")
