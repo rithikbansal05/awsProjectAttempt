@@ -40,8 +40,8 @@ def ClearFunc():
 @application.route('/query',methods=['POST'])
 def loaddat():
 
-    firstName = str(request.form['fName'])
-    lastName = str(request.form['lName'])
+    firstName = str(request.form['firstName'])
+    lastName = str(request.form['lastName'])
     application.logger.info("The first name and last name are" +firstName + " " + lastName)
     qData = queryData(firstName,lastName)
     application.logger.info(str(qData))
