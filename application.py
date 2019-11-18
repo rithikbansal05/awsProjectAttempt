@@ -61,7 +61,7 @@ def read_data_upload_s3():
     #s3.Bucket('css490').download_file(key,key)
     #s3.meta.client.download_file('css490',key, key)
     application.logger.info("downloaded file")
-    client1.upload_file(key,bucket_name,key)
+    client1.upload_file(key,bucket_name,key, ExtraArgs={'ACL':'public-read'})
     application.logger.info("uploaded file to s3")
     #session = boto3.Session()
     #s3Obj = session.resource('s3')
@@ -116,13 +116,13 @@ def checkAndAddToDb(currLine):
     for word in currLine[2:]:
         otherString += word + " "
 
-    db_client = boto3.client('dynamodb')
+    db_client = boto3.client('dynamodb', region_name='us-west-2')
     reponse = db_client.list_tables()
 
     if dbName not in reponse["TableNames"]:
         create_db()
 
-    clientObj = boto3.resource('dynamodb')
+    clientObj = boto3.resource('dynamodb', region_name='us-west-2')
     table = clientObj.Table('programfourestoragetable')
     tempVar = table.table_status
     while len(str(tempVar)) is not len("ACTIVE"):
@@ -187,9 +187,10 @@ def load_data():
 def clear_data():
     global table
     global dynDb
+    application.logger.info("Clearing data now")
     #dynamodb = boto3.client('dynamodb')
     try:
-        dynDb = boto3.resource('dynamodb')
+        dynDb = boto3.resource('dynamodb', region_name='us-west-2')
     except ClientError as e:
         print("error message")
         return 0
@@ -231,8 +232,8 @@ def clear_data():
     '''
 
 def queryData(q1, q2):
-    dynamodb = boto3.client('dynamodb')
-    tempDb = boto3.resource('dynamodb')
+    dynamodb = boto3.client('dynamodb', region_name='us-west-2')
+    tempDb = boto3.resource('dynamodb', region_name='us-west-2')
     table = tempDb.Table('programfourestoragetable')
     response = []
     try:
