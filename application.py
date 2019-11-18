@@ -70,7 +70,7 @@ def read_data_upload_s3():
     #bucket.upload_fileobj(r.raw, key, ExtraArgs={'ACL': 'public-read'})
 
 def create_db():
-    dbServ = boto3.resource('dynamodb')
+    dbServ = boto3.resource('dynamodb', region_name='us-west-2')
     table = dbServ.create_table(
         TableName=dbName,
         KeySchema=[
@@ -99,6 +99,7 @@ def create_db():
     )
 
     print("Table Status: ", table.table_status)
+    application.logger.info("Table created")
 
 
 def checkAndAddToDb(currLine):
@@ -135,6 +136,7 @@ def checkAndAddToDb(currLine):
                 'otherString': otherString
             }
         )
+        application.logger.info("data added")
     except ClientError as e:
         return 0
 
