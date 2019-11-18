@@ -71,32 +71,36 @@ def read_data_upload_s3():
 
 def create_db():
     dbServ = boto3.resource('dynamodb', region_name='us-west-2')
-    table = dbServ.create_table(
-        TableName=dbName,
-        KeySchema=[
-            {
-                'AttributeName': 'firstName',
-                'KeyType': 'HASH'
-            },
-            {
-                'AttributeName': 'lastName',
-                'KeyType': 'RANGE'
+    try:
+        table = dbServ.create_table(
+            TableName=dbName,
+            KeySchema=[
+                {
+                    'AttributeName': 'firstName',
+                    'KeyType': 'HASH'
+                },
+                {
+                    'AttributeName': 'lastName',
+                    'KeyType': 'RANGE'
+                }
+            ],
+            AttributeDefinitions=[{
+                    'AttributeName': 'firstName',
+                    'AttributeType': 'S'
+                },
+                {
+                    'AttributeName': 'lastName',
+                    'AttributeType': 'S'
+                }
+            ],
+            ProvisionedThroughput={
+                'ReadCapacityUnits': 5,
+                'WriteCapacityUnits': 5
             }
-        ],
-        AttributeDefinitions=[{
-            'AttributeName': 'firstName',
-            'AttributeType': 'S'
-        },
-            {
-                'AttributeName': 'lastName',
-                'AttributeType': 'S'
-            }
-        ],
-        ProvisionedThroughput={
-            'ReadCapacityUnits': 5,
-            'WriteCapacityUnits': 5
-        }
-    )
+        )
+    except ClientError as e:
+        print("table already exisits")
+        return
 
     print("Table Status: ", table.table_status)
     application.logger.info("Table created")
