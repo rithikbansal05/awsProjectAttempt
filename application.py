@@ -48,8 +48,8 @@ def read_data_upload_s3():
     application.logger.info("adding file to s3")
 
     #r = requests.get(url, stream=True)
-    s3.Bucket('css490').download_file(key,key)
-
+    #s3.Bucket('css490').download_file(key,key)
+    s3.meta.client.download_file('css490',key, key)
     application.logger.info("downloaded file")
     client1.upload_file(key,bucket_name,key)
     application.logger.info("uploaded file to s3")
@@ -164,12 +164,17 @@ def load_data():
 
 def clear_data():
     global table
+    global dynDb
     #dynamodb = boto3.client('dynamodb')
-    dynDb = boto3.resource('dynamodb')
+    try:
+        dynDb = boto3.resource('dynamodb')
+    except ClientError as e:
+        print("error message")
+        return 0
     #table_list = dynamodb.list_tables()['TableNames']
 
     try:
-        table = dynDb.Table('programfourestoragetable')
+        table = dynDb.Table(dbName)
     except ClientError as e:
         print("Not table")
         return
