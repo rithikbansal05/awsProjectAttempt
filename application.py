@@ -16,6 +16,7 @@ key = 'input.txt'
 dbName = 'programfourestoragetable'
 my_list = []
 data = []
+msg = ""
 
 application = Flask(__name__, template_folder='template')
 application.debug = True
@@ -29,13 +30,13 @@ def hello():
 def LoadData():
     application.logger.info("load data method ")
     load_data()
-    return render_template('home.html')
+    return render_template('home.html', message=msg)
 
 @application.route('/clear',methods=['POST'])
 def ClearFunc():
     application.logger.info("clearing data")
     clear_data()
-    return render_template('home.html')
+    return render_template('home.html',message=msg)
 
 @application.route('/query',methods=['POST'])
 def loaddat():
@@ -49,7 +50,7 @@ def loaddat():
         application.logger.info("got results. Uploading")
         return render_template("home.html", data=qData)
     elif qData == None or qData == []:
-        return render_template("home.html", data="No users match query results")
+        return render_template("home.html", message="No users match query results. Please try again with valid input")
 
 def read_data_upload_s3():
     application.logger.info("adding file to s3")
@@ -63,19 +64,13 @@ def read_data_upload_s3():
     with open(location, 'wb') as f:
         f.write(datatowrite)
 
-    #r = requests.get(url, stream=True)
-    #s3.Bucket('css490').download_file(key,key)
-    #s3.meta.client.download_file('css490',key, key)
     application.logger.info("downloaded file")
     client1.upload_file(key,bucket_name,key, ExtraArgs={'ACL':'public-read'})
     application.logger.info("uploaded file to s3")
-    #session = boto3.Session()
-    #s3Obj = session.resource('s3')
 
-    #bucket = s3Obj.Bucket(bucket_name)
-    #bucket.upload_fileobj(r.raw, key, ExtraArgs={'ACL': 'public-read'})
 
 def create_db():
+    global msg
     dbServ = boto3.resource('dynamodb', region_name='us-west-2')
     try:
         table = dbServ.create_table(
@@ -105,7 +100,7 @@ def create_db():
             }
         )
     except ClientError as e:
-        print("table already exisits")
+        msg += " table already exisits."
         return
 
     print("Table Status: ", table.table_status)
@@ -114,7 +109,7 @@ def create_db():
 
 def checkAndAddToDb(currLine):
     application.logger.info("contents of " + str(len(currLine)))
-
+    global msg
     firstName = currLine[0]
     lastName = currLine[1]
     otherString = ""
@@ -147,17 +142,12 @@ def checkAndAddToDb(currLine):
         )
         application.logger.info("data added")
     except ClientError as e:
+        msg+= "Unable to place value in Db"
         return 0
 
 
 
 def update_dynamoDb():
-    # content = s3.Object(bucket_name, key).get()
-    # body = content['Body']
-
-    fileObj = client1.get_object(Bucket=bucket_name, Key=key)
-    fileData = fileObj['Body'].read()
-
     contents = []
     for line in urllib.urlopen(url):
         contents.append(line.split())
@@ -165,23 +155,10 @@ def update_dynamoDb():
     for obj in contents:
         checkAndAddToDb(obj)
 
-    '''
-    tableKeys = []
-    tableKeys.append("firstName")
-    tableKeys.append("lastName")
-
-    for word in contents.split():
-        if len(word.split('=')) > 1 :
-            keyValue = word.split('=')
-            tableKeys.append(str(keyValue[0]))
-
-    my_list = list(set(tableKeys))
-
-    for line in contents.splitlines():
-        checkAndAddToDb(line)
-    '''
 
 def load_data():
+    global msg
+    msg = ""
     application.logger.info("inside load_data")
     read_data_upload_s3()
 
@@ -193,24 +170,28 @@ def load_data():
 def clear_data():
     global table
     global dynDb
+    global msg
+    msg = ""
     application.logger.info("Clearing data now")
-    #dynamodb = boto3.client('dynamodb')
+
     try:
         dynDb = boto3.resource('dynamodb', region_name='us-west-2')
     except ClientError as e:
+        msg+="DynamoDb table does not exist."
         print("error message")
         return 0
-    #table_list = dynamodb.list_tables()['TableNames']
 
     try:
         table = dynDb.Table(dbName)
     except ClientError as e:
+        msg += " Requested table does not exist."
         print("Not table")
         return
 
     try:
         table.delete()
     except ClientError  as e:
+        msg += " Nothing was deleted."
         print("Table not there")
         return 0
 
@@ -218,26 +199,14 @@ def clear_data():
         s3.Object(bucket_name, key).delete()
         time.sleep(3)
     except ClientError as e:
+        msg += " S3 bucket has nothing to delete."
         print("file not found")
         return 0
 
-    '''
-    if dbName in table_list:
-        table.delete()
-        time.sleep(5)
-
-    obj = s3.Object(bucket_name, key)
-    obj2 = boto3.client('s3')
-    obj_list = obj2.list_objects(Bucket=bucket_name)['Contents']
-
-    if obj in obj_list:
-        obj.delete()
-        time.sleep(3)
-    
-    print("Successfully deleted the data or it was never there")
-    '''
 
 def queryData(q1, q2):
+    global msg
+    msg = ""
     application.logger.info(q1 + " " + q2)
     dynamodb = boto3.client('dynamodb', region_name='us-west-2')
     tempDb = boto3.resource('dynamodb', region_name='us-west-2')
@@ -245,19 +214,18 @@ def queryData(q1, q2):
     response = []
     try:
         if dbName not in dynamodb.list_tables()['TableNames']:
-            print("DAtabase table does not exist. Load data first")
+            msg += "DAtabase table does not exist. Load data first"
         else:
             if (q1 is None or len(q1) is 0) and (q2 is None or len(q2) is 0):
-                print("FirstName and lastname values null or empty. Try again")
+                msg += " FirstName and lastname values null or empty. Try again."
             elif (q1 is not None and len(q1) > 0) and (q2 is not None and len(q2) > 0):
-                print("Querying database right now")
+                msg += " Querying database right now."
                 response = table.scan(FilterExpression=Key('firstName').eq(q1) & Attr('lastName').eq(q2))
             elif q2 is not None and len(q2) > 0:
-                print("Querying database right now with lastName only")
+                msg +=" Querying database right now with lastName only."
                 response = table.scan(FilterExpression=Attr('lastName').eq(q2))
-                #response = table.query(KeyConditionExpression=boto3.dynamodb.conditions.Key('lastName').eq(str(q2)))
             elif q1 is not None and len(q1) > 0:
-                print("Querying database right now with firstName only")
+                msg +="Querying database right now with firstName only."
                 response = table.scan(FilterExpression=Key('firstName').eq(q1))
                 #response = table.query(KeyConditionExpression=boto3.dynamodb.conditions.Key('firstName').eq(str(q1)))
 
