@@ -13,24 +13,24 @@ dbName = 'programfourestoragetable'
 my_list = []
 data = []
 
-app = Flask(__name__, template_folder='template')
-app.debug = True
+application = Flask(__name__, template_folder='template')
+application.debug = True
 
-@app.route('/',methods=['GET'])
+@application.route('/',methods=['GET'])
 def hello():
     return render_template('home.html')
 
-@app.route('/update',methods=['POST'])
+@application.route('/update',methods=['POST'])
 def LoadData():
     load_data()
     return render_template('home.html')
 
-@app.route('/clear',methods=['POST'])
+@application.route('/clear',methods=['POST'])
 def ClearFunc():
     clear_data()
     return render_template('home.html')
 
-@app.route('/query',methods=['POST'])
+@application.route('/query',methods=['POST'])
 def loaddat():
     fName = str(request.form['fName'])
     lName = str(request.form['lName'])
@@ -196,4 +196,4 @@ def queryData(q1, q2):
 
 
 if __name__ == "__main__":
-    app.run()
+    application.run()
