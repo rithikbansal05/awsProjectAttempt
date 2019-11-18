@@ -20,10 +20,13 @@ application.debug = True
 def hello():
     return render_template('home.html')
 
-@application.route('/update',methods=['POST'])
+@application.route('/',methods=['POST'])
 def LoadData():
-    load_data()
-    return render_template('home.html')
+
+    if request.form.get('update') == 'update':
+        load_data()
+    else:
+        return render_template('home.html')
 
 @application.route('/clear',methods=['POST'])
 def ClearFunc():
