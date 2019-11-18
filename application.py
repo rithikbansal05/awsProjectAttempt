@@ -1,7 +1,7 @@
 import os
 import boto3
 import time
-import urllib3
+import urllib
 import requests
 import boto3.dynamodb.conditions
 from botocore.exceptions import ClientError
@@ -52,7 +52,7 @@ def read_data_upload_s3():
     global fname
     fname = url[url.rfind("/") + 1:]
     location = os.getcwd() + "/" + url[url.rfind("/") + 1:]
-    data = urllib3.urlopen(url)
+    data = urllib.urlopen(url)
     datatowrite = data.read()
     with open(location, 'wb') as f:
         f.write(datatowrite)
