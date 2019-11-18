@@ -253,11 +253,14 @@ def queryData(q1, q2):
                 print("Querying database right now with firstName only")
                 response = table.query(KeyConditionExpression=boto3.dynamodb.conditions.Key('firstName').eq(str(q1)))
 
-        for i in response['Items']:
-            temp2 = []
-            temp2.append(i['firstName']).append(i['lastName']).append(i['otherString'])
-            data.append(temp2)
-            return data
+        application.logger.info(str(len(response)) + " " + response[0])
+        return response[:]
+        #for i in response['Items']:
+        #    temp2 = []
+        #    application.logger.info(i['firstName'] +  " " + i['lastName']+" " + i['otherString'])
+        #    temp2.append(i['firstName']).append(i['lastName']).append(i['otherString'])
+        #    data.append(temp2)
+        #    return data
     except ClientError as e:
         retVal = []
         retVal.append("Table does not exist")
