@@ -19,26 +19,31 @@ application.debug = True
 
 @application.route('/',methods=['GET'])
 def hello():
+    application.logger("home page working")
     return render_template('home.html')
 
 @application.route('/update',methods=['POST'])
 def LoadData():
+    application.logger("load data method ")
     load_data()
     return render_template('home.html')
 
 @application.route('/clear',methods=['POST'])
 def ClearFunc():
+
     clear_data()
     return render_template('home.html')
 
 @application.route('/query',methods=['POST'])
 def loaddat():
+
     fName = str(request.form['fName'])
     lName = str(request.form['lName'])
     queryData(fName,lName)
     return data
 
 def read_data_upload_s3():
+    application.logger("adding file to s3")
     r = requests.get(url, stream=True)
 
     session = boto3.Session()
@@ -146,6 +151,7 @@ def update_dynamoDb():
 
 
 def load_data():
+    application.logger("inside load_data")
     read_data_upload_s3()
     update_dynamoDb()
 
