@@ -107,7 +107,7 @@ def create_db():
 
 
 def checkAndAddToDb(currLine):
-    application.logger.info("contents of " + len(currLine))
+    application.logger.info("contents of " + str(len(currLine)))
 
     firstName = currLine[0]
     lastName = currLine[1]
