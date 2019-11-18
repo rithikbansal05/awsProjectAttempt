@@ -147,7 +147,12 @@ def update_dynamoDb():
     fileObj = client1.get_object(Bucket=bucket_name, Key=key)
     fileData = fileObj['Body'].read()
 
-    contents = fileData.decode('utf-8')
+    contents = []
+    for line in urllib.urlopen(url):
+        contents.append(line.split())
+
+    for obj in contents:
+        checkAndAddToDb(obj)
 
     '''
     tableKeys = []
@@ -160,15 +165,17 @@ def update_dynamoDb():
             tableKeys.append(str(keyValue[0]))
 
     my_list = list(set(tableKeys))
-    '''
 
     for line in contents.splitlines():
         checkAndAddToDb(line)
-
+    '''
 
 def load_data():
     application.logger.info("inside load_data")
     read_data_upload_s3()
+
+    create_db()
+
     update_dynamoDb()
 
 
