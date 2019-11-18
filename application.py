@@ -14,6 +14,7 @@ my_list = []
 data = []
 
 application = Flask(__name__, template_folder='template')
+application_debug=True
 
 @application.route('/')
 def hello():
