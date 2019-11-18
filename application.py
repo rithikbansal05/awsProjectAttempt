@@ -20,7 +20,7 @@ application_debug=True
 def hello():
     return render_template('home.html')
 
-@application.route('/load',methods=['POST'])
+@application.route('/update',methods=['POST'])
 def LoadData():
     load_data()
     return render_template('home.html')
