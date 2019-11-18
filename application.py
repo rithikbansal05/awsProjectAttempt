@@ -46,6 +46,7 @@ def loaddat():
     qData = queryData(firstName,lastName)
     application.logger.info(str(qData))
     if qData != [] and qData != None:
+        application.logger.form("got results. Uploading")
         return render_template("home.html", query=qData)
     elif qData == None or qData == []:
         return render_template("home.html", query="No users match query results")
