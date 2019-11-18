@@ -42,8 +42,11 @@ def loaddat():
     fName = str(request.form['fName'])
     lName = str(request.form['lName'])
     application.logger.info("The first name and last name are" +fName + " " + lName)
-    queryData(fName,lName)
-    return data
+    qData = queryData(fName,lName)
+    if qData != [] and qData != None:
+        return render_template("home.html", query=qData)
+    elif qData == None or qData == []:
+        return render_template("home.html", query="User NF.")
 
 def read_data_upload_s3():
     application.logger.info("adding file to s3")
