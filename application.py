@@ -40,10 +40,10 @@ def ClearFunc():
 @application.route('/query',methods=['POST'])
 def loaddat():
 
-    fName = str(request.form['fName'])
-    lName = str(request.form['lName'])
-    application.logger.info("The first name and last name are" +fName + " " + lName)
-    qData = queryData(fName,lName)
+    firstName = str(request.form['fName'])
+    lastName = str(request.form['lName'])
+    application.logger.info("The first name and last name are" +firstName + " " + lastName)
+    qData = queryData(firstName,lastName)
     application.logger.info(str(qData))
     if qData != [] and qData != None:
         return render_template("home.html", query=qData)
