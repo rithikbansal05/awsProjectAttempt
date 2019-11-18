@@ -1,6 +1,7 @@
 import os
 import boto3
 import time
+import urllib3
 import requests
 import boto3.dynamodb.conditions
 from botocore.exceptions import ClientError
@@ -47,9 +48,18 @@ def loaddat():
 def read_data_upload_s3():
     application.logger.info("adding file to s3")
 
+    global url
+    global fname
+    fname = url[url.rfind("/") + 1:]
+    location = os.getcwd() + "/" + url[url.rfind("/") + 1:]
+    data = urllib3.urlopen(url)
+    datatowrite = data.read()
+    with open(location, 'wb') as f:
+        f.write(datatowrite)
+
     #r = requests.get(url, stream=True)
     #s3.Bucket('css490').download_file(key,key)
-    s3.meta.client.download_file('css490',key, key)
+    #s3.meta.client.download_file('css490',key, key)
     application.logger.info("downloaded file")
     client1.upload_file(key,bucket_name,key)
     application.logger.info("uploaded file to s3")

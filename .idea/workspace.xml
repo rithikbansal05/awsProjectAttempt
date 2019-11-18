@@ -22,8 +22,8 @@
       <file leaf-file-name="application.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/application.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="155">
-              <caret line="46" column="4" selection-start-line="46" selection-start-column="4" selection-end-line="46" selection-end-column="4" />
+            <state relative-caret-position="185">
+              <caret line="62" column="4" selection-start-line="62" selection-start-column="4" selection-end-line="62" selection-end-column="4" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -58,7 +58,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="952" />
     <option name="width" value="977" />
     <option name="height" value="1038" />
@@ -138,7 +138,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="762" y="0" width="781" height="830" extended-state="0" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -146,8 +146,8 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Python Console" order="9" weight="0.32918397" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.3269494" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.4986979" visible="true" weight="0.28492394" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.29074314" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.4986979" visible="true" weight="0.28180575" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1451823" />
       <window_info anchor="right" id="R Packages" order="4" />
       <window_info anchor="right" id="R Graphics" order="3" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32968536" />
@@ -329,8 +329,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="46" column="4" selection-start-line="46" selection-start-column="4" selection-end-line="46" selection-end-column="4" />
+        <state relative-caret-position="185">
+          <caret line="62" column="4" selection-start-line="62" selection-start-column="4" selection-end-line="62" selection-end-column="4" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
