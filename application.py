@@ -107,7 +107,7 @@ def create_db():
 
 
 def checkAndAddToDb(currLine):
-    application.logger.info("contents of " + currLine)
+    application.logger.info("contents of " + currLine[0] +" " +currLine[1] + " " +currLine[2])
     currLine.strip()
 
     valuesWord = currLine.split()
