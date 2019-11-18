@@ -31,7 +31,7 @@ def LoadData():
 
 @application.route('/clear',methods=['POST'])
 def ClearFunc():
-
+    application.logger.info("clearing data")
     clear_data()
     return render_template('home.html')
 
@@ -40,20 +40,24 @@ def loaddat():
 
     fName = str(request.form['fName'])
     lName = str(request.form['lName'])
+    application.logger.info("The first name and last name are" +fName + " " + lName)
     queryData(fName,lName)
     return data
 
 def read_data_upload_s3():
     application.logger.info("adding file to s3")
 
-    r = requests.get(url, stream=True)
+    #r = requests.get(url, stream=True)
+    s3.Bucket('css490').download_file(key,key)
 
-    session = boto3.Session()
-    s3Obj = session.resource('s3')
+    application.logger.info("downloaded file")
+    client1.upload_file(key,bucket_name,key)
+    application.logger.info("uploaded file to s3")
+    #session = boto3.Session()
+    #s3Obj = session.resource('s3')
 
-    bucket = s3Obj.Bucket(bucket_name)
-    bucket.upload_fileobj(r.raw, key, ExtraArgs={'ACL': 'public-read'})
-
+    #bucket = s3Obj.Bucket(bucket_name)
+    #bucket.upload_fileobj(r.raw, key, ExtraArgs={'ACL': 'public-read'})
 
 def create_db():
     dbServ = boto3.resource('dynamodb')
