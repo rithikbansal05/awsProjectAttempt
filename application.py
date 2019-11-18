@@ -107,15 +107,13 @@ def create_db():
 
 
 def checkAndAddToDb(currLine):
-    application.logger.info("contents of " + currLine[0] +" " +currLine[1] + " " +currLine[2])
-    currLine.strip()
+    application.logger.info("contents of " + len(currLine))
 
-    valuesWord = currLine.split()
-    firstName = valuesWord[0]
-    lastName = valuesWord[1]
+    firstName = currLine[0]
+    lastName = currLine[1]
     otherString = ""
 
-    for word in valuesWord[2:]:
+    for word in currLine[2:]:
         otherString += word + " "
 
     db_client = boto3.client('dynamodb')
