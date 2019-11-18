@@ -6,6 +6,7 @@ import requests
 import boto3.dynamodb.conditions
 from botocore.exceptions import ClientError
 from flask import Flask, render_template, request
+from boto3.dynamodb.conditions import Key, Attr
 
 s3 = boto3.resource("s3")
 client1 = boto3.client("s3")
@@ -235,7 +236,8 @@ def clear_data():
     print("Successfully deleted the data or it was never there")
     '''
 
-def queryData(q1="", q2=""):
+def queryData(q1, q2):
+    application.logger.info(q1 + " " + q2)
     dynamodb = boto3.client('dynamodb', region_name='us-west-2')
     tempDb = boto3.resource('dynamodb', region_name='us-west-2')
     table = tempDb.Table('programfourestoragetable')
@@ -248,17 +250,18 @@ def queryData(q1="", q2=""):
                 print("FirstName and lastname values null or empty. Try again")
             elif (q1 is not None and len(q1) > 0) and (q2 is not None and len(q2) > 0):
                 print("Querying database right now")
-                response = table.query(KeyConditionExpression=boto3.dynamodb.conditions.Key('firstName').eq(
-                    str(q1)) & boto3.dynamodb.conditions.Key('lastName').eq(str(q2)))
+                response = table.scan(FilterExpression=Key('firstName').eq(q1) & Attr('lastName').eq(q2))
             elif q2 is not None and len(q2) > 0:
                 print("Querying database right now with lastName only")
-                response = table.query(KeyConditionExpression=boto3.dynamodb.conditions.Key('lastName').eq(str(q2)))
+                response = table.scan(FilterExpression=Attr('lastName').eq(q2))
+                #response = table.query(KeyConditionExpression=boto3.dynamodb.conditions.Key('lastName').eq(str(q2)))
             elif q1 is not None and len(q1) > 0:
                 print("Querying database right now with firstName only")
-                response = table.query(KeyConditionExpression=boto3.dynamodb.conditions.Key('firstName').eq(str(q1)))
+                response = table.scan(FilterExpression=Key('firstName').eq(q1))
+                #response = table.query(KeyConditionExpression=boto3.dynamodb.conditions.Key('firstName').eq(str(q1)))
 
-        application.logger.info(str(len(response)))
-        return response[:]
+        application.logger.info(str(len(response['Items'])))
+        return response['Items']
         #for i in response['Items']:
         #    temp2 = []
         #    application.logger.info(i['firstName'] +  " " + i['lastName']+" " + i['otherString'])

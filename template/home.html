@@ -14,14 +14,12 @@
         <input type="submit" name="Load">Load Data</input>
     </form>
 
-    <p></p>
-	<form action="query" method="POST">
-        <label for="FirstName"> First Name: </label>
-        <input type="text" id="FirstName" name="fName" autofocus autocomplete="off">
-        <label for="LastName"> Last Name: </label>
-        <input type="text" id="LastName" name="lName" autofocus autocomplete="off">
-        <button>Query</button>
-	</form>
+    <form action = "/query" method = "post">
+            <input type="text" name = "first"></input>
+            <input type="text" name = "last"></input>
+            <input type="submit" value = "Query Data"></input>
+    </form>
+        </br></br></br></br>
 
     <body>
         <h2>Query Results</h2>
@@ -29,5 +27,20 @@
         <p>{{loaded_data}}</p>
         <p>{{cleared_data}}</p>
     </body>
+
+
+
+        {% if data == None %}
+            <p></p>
+        {% else %}
+            {% for item in data %}
+                <h4>Date item:</h4>
+                <ul>
+                {% for keys in item %}
+                    <li> {{keys}} : {{item[keys]}} </li>
+                {% endfor %}
+                </ul>
+            {% endfor %}
+        {% endif %}
   </body>
 </html>
