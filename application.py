@@ -2,6 +2,7 @@ import boto3
 import time
 import requests
 import boto3.dynamodb.conditions
+from botocore.exceptions import ClientError
 from flask import Flask, render_template, request
 
 s3 = boto3.resource("s3")
@@ -20,13 +21,10 @@ application.debug = True
 def hello():
     return render_template('home.html')
 
-@application.route('/',methods=['POST'])
+@application.route('/update',methods=['POST'])
 def LoadData():
-
-    if request.form.get('update') == 'update':
-        load_data()
-    else:
-        return render_template('home.html')
+    load_data()
+    return render_template('home.html')
 
 @application.route('/clear',methods=['POST'])
 def ClearFunc():
@@ -108,14 +106,17 @@ def checkAndAddToDb(currLine):
         print("Waiting for table to get created")
         table = clientObj.Table('programfourestoragetable')
         tempVar = table.table_status
+    try:
+        table.put_item(
+            Item={
+                'firstName': firstName,
+                'lastName': lastName,
+                'otherString': otherString
+            }
+        )
+    except ClientError as e:
+        return 0
 
-    table.put_item(
-        Item={
-            'firstName': firstName,
-            'lastName': lastName,
-            'otherString': otherString
-        }
-    )
 
 
 def update_dynamoDb():
