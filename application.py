@@ -43,7 +43,7 @@ def loaddat():
     lName = str(request.form['lName'])
     application.logger.info("The first name and last name are" +fName + " " + lName)
     qData = queryData(fName,lName)
-    application.logger.info("data retrieved is " + qData)
+    application.logger.info(str(qData))
     if qData != [] and qData != None:
         return render_template("home.html", query=qData)
     elif qData == None or qData == []:
@@ -235,7 +235,7 @@ def clear_data():
     print("Successfully deleted the data or it was never there")
     '''
 
-def queryData(q1, q2):
+def queryData(q1="", q2=""):
     dynamodb = boto3.client('dynamodb', region_name='us-west-2')
     tempDb = boto3.resource('dynamodb', region_name='us-west-2')
     table = tempDb.Table('programfourestoragetable')
