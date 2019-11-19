@@ -40,17 +40,23 @@ def ClearFunc():
 
 @application.route('/query',methods=['POST'])
 def loaddat():
-
+    global msg
     firstName = str(request.form['first'])
     lastName = str(request.form['last'])
     application.logger.info("The first name and last name are" +firstName + " " + lastName)
     qData = queryData(firstName,lastName)
     application.logger.info(str(qData))
-    if qData != [] and qData != None:
-        application.logger.info("got results. Uploading")
-        return render_template("home.html", data=qData)
-    elif qData == None or qData == []:
-        return render_template("home.html", message="No users match query results. Please try again with valid input")
+
+    try:
+        if qData != [] and qData != None:
+            application.logger.info("got results. Uploading")
+            return render_template("home.html", data=qData)
+        elif qData == None or qData == []:
+            return render_template("home.html", message="No users match query results. Please try again with valid input")
+    except ClientError as e:
+        print("No valid suers found")
+        msg+= " No valid data found"
+        return 0;
 
 def read_data_upload_s3():
     application.logger.info("adding file to s3")
